@@ -1,6 +1,6 @@
 package com.bryanrady.datastruct_alogrithm.alogrithm.sort;
 
-import com.bryanrady.datastruct_alogrithm.datastruct.linkedlist.SinglyLinkedList;
+import com.bryanrady.datastruct_alogrithm.datastruct.list.SinglyLinkedList;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.bryanrady.datastruct_alogrithm.datastruct.linkedlist;
+package com.bryanrady.datastruct_alogrithm.datastruct.list;
 
 import java.util.NoSuchElementException;
 
