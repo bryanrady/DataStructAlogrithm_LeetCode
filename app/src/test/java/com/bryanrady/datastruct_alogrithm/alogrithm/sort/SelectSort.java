@@ -6,13 +6,13 @@ import org.junit.Test;
  * Created by bryanrady on 2017/12/6.
  */
 
-public class SelectionSort {
+public class SelectSort {
 
     /**
      * 选择排序   快速排序的基础
      */
 
-    public static void selectionSort(int[] array){
+    public static void selectSort(int[] array){
         for(int i=0;i<array.length;i++){
             int index = i;
             for(int j= i+1;j<array.length;j++){
@@ -31,7 +31,7 @@ public class SelectionSort {
     @Test
     public void test(){
         int[] array = new int[]{6,7,2,4,9,8,5,1,3};
-        selectionSort(array);
+        selectSort(array);
         for(int a:array){
             System.out.print(a+" ");
         }
