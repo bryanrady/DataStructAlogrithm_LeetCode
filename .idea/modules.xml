@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DataStruct_Alogrithm.iml" filepath="$PROJECT_DIR$/DataStruct_Alogrithm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataStructAlogrithm_LeetCode.iml" filepath="$PROJECT_DIR$/DataStructAlogrithm_LeetCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
