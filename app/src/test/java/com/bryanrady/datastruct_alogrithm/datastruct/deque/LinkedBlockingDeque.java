@@ -11,14 +11,16 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  *  阻塞双端队列  LinkedBlockingDeque是一个基于链表的双端阻塞队列。和LinkedBlockingQueue类似，
  *  区别在于该类实现了Deque接口，而LinkedBlockingQueue实现了Queue接口
- *      extends AbstractQueue<E>
-        implements BlockingDeque<E>,  java.io.Serializable
+ *
  从数据结构和功能需求上可以得到以下结论：
 
  1.要想支持阻塞功能，队列的容量一定是固定的，否则无法在入队的时候挂起线程。也就是capacity是final类型的。
  2.既然是双向链表，每一个结点就需要前后两个引用，这样才能将所有元素串联起来，支持双向遍历。也即需要prev/next两个引用。
  3.双向链表需要头尾同时操作，所以需要first/last两个节点，当然可以参考LinkedList那样采用一个节点的双向来完成，那样实现起来就稍微麻烦点。
  4.既然要支持阻塞功能，就需要锁和条件变量来挂起线程。这里使用一个锁两个条件变量来完成此功能。
+
+    extends AbstractQueue<E>
+    implements BlockingDeque<E>,  java.io.Serializable
  */
 
 public class LinkedBlockingDeque<E> {
