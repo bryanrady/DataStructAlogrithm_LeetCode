@@ -15,6 +15,15 @@ import java.util.Map;
 
  在使用之前最好先估计好容量大小，这样就不用增大容量那么麻烦
 
+
+ static int indexFor(int h, int length) {
+ return h & (length-1);
+ }
+ ：length为2的整数次幂的话，为偶数，这样length-1为奇数，奇数的最后一位是1，这样便保证了h&(length-1)的最后一位可能为0，
+ 也可能为1（这取决于h的值），即与后的结果可能为偶数，也可能为奇数，这样便可以保证散列的均匀性，而如果length为奇数的话，
+ 很明显length-1为偶数，它的最后一位是0，这样h&(length-1)的最后一位肯定为0，即只能为偶数，这样任何hash值都只会被散列到
+ 数组的偶数下标位置上，这便浪费了近一半的空间。
+
  http://blog.csdn.net/zhcswlp0625/article/details/65092032
  */
 public class HashMap<K,V> {
