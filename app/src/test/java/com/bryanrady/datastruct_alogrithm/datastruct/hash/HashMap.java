@@ -5,9 +5,10 @@ package com.bryanrady.datastruct_alogrithm.datastruct.hash;
  */
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
- *     Android的SDK 中的HashMap可能和JDK中的有点小区别，但是基本一样，我们这里已学习jdk中的为主
+ *     Android的SDK 中的HashMap可能和JDK中的有点小区别，但是基本一样，我们这里已学习android中的为主
     extends AbstractMap<K,V>
     implements Map<K,V>, Cloneable, Serializable
  Hashmap继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。它的key、value都可以为null，映射不是有序的。 　　 　　
@@ -33,13 +34,13 @@ public class HashMap<K,V> {
      * @param <K>    Entry是一个单链表
      * @param <V>
      */
-    static class Entry<K,V> implements Map.Entry<K,V>{
+    static class HashMapEntry<K,V> implements Map.Entry<K,V>{
         K key;
         V value;
-        Entry<K,V> next;    //指向下一个节点
+        HashMapEntry<K,V> next;    //指向下一个节点
         int hash;
 
-        Entry(int hash,K k,V v,Entry<K,V> n){
+        HashMapEntry(int hash,K k,V v,HashMapEntry<K,V> n){
             this.hash = hash;
             this.key = k;
             this.value = v;
@@ -82,9 +83,8 @@ public class HashMap<K,V> {
             return false;
         }
 
-        public final int hashCode(){    //jdk上获取哈希值方法
-            return (key==null   ? 0 : key.hashCode()) ^
-                    (value==null ? 0 : value.hashCode());
+        public final int hashCode() {
+            return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());
         }
 
         public final String toString() {
@@ -111,8 +111,8 @@ public class HashMap<K,V> {
 
     /********     hashmap      ***********/
 
-    /**默认初始容量为16**/
-    static final int DEFAULT_INITIAL_CAPACITY = 16;
+    /**Android 默认初始容量为4  jdk是16 **/
+    static final int DEFAULT_INITIAL_CAPACITY = 4;
 
     /** 最大容量  2的30次方  整数最大值 **/
     static final int MAXIMUM_CAPACITY = 1 << 30;
@@ -120,13 +120,15 @@ public class HashMap<K,V> {
     /**  默认的加载因子 75% **/
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-    Entry<K,V>[] table ;
+    static final HashMapEntry<?,?>[] EMPTY_TABLE = {};
+
+    HashMapEntry<K,V>[] table = (HashMapEntry<K,V>[]) EMPTY_TABLE;
 
     /**  HashMap的底层数组中已用槽的数量 **/
     int size;
 
-    /**  实际的加载因子大小,先默认是这么多 **/
-    final float loadFactor;
+    /**  实际的加载因子大小,都默认是0.75f **/
+    final float loadFactor = DEFAULT_LOAD_FACTOR;
 
     /**  HashMap的阈值，用于判断是否需要调整HashMap的容量（threshold = 容量*加载因子） **/
     int threshold;
@@ -148,13 +150,8 @@ public class HashMap<K,V> {
         if (loadFactor <= 0 || Float.isNaN(loadFactor))     //加载因子不能小于0
             throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
 
-        int capacity = 1;
-        while(capacity < initialCapacity){
-            capacity = capacity<< 1;    //2倍的增长
-        }
-        this.loadFactor = loadFactor;
-        threshold = (int)(capacity * loadFactor);
-        table = new Entry[capacity]; //初始化数组
+        // Android-Note: We always use the default load factor of 0.75f.
+        threshold = initialCapacity;
         init();     //这个方法不做任何事，留给继承HashMap这个类的子类自己去实现
     }
 
@@ -183,7 +180,38 @@ public class HashMap<K,V> {
     public HashMap(Map<? extends K,? extends V> m){
         this(Math.max((int)(m.size()/DEFAULT_LOAD_FACTOR) + 1, DEFAULT_INITIAL_CAPACITY),
                 DEFAULT_LOAD_FACTOR);
+        inflateTable(threshold);
         putAllForCreate(m);
+    }
+
+    private static int roundUpToPowerOf2(int number) {
+        // assert number >= 0 : "number must be non-negative";
+        int rounded = number >= MAXIMUM_CAPACITY
+                ? MAXIMUM_CAPACITY
+                : (rounded = Integer.highestOneBit(number)) != 0
+                ? (Integer.bitCount(number) > 1) ? rounded << 1 : rounded
+                : 1;
+
+        return rounded;
+    }
+
+    /**
+     * Inflates the table.
+     */
+    private void inflateTable(int toSize) {
+        // Find a power of 2 >= toSize
+        int capacity = roundUpToPowerOf2(toSize);
+
+        // Android-changed: Replace usage of Math.min() here because this method is
+        // called from the <clinit> of runtime, at which point the native libraries
+        // needed by Float.* might not be loaded.
+        float thresholdFloat = capacity * loadFactor;
+        if (thresholdFloat > MAXIMUM_CAPACITY + 1) {
+            thresholdFloat = MAXIMUM_CAPACITY + 1;
+        }
+
+        threshold = (int) thresholdFloat;
+        table = new HashMapEntry[capacity];
     }
 
     /**
@@ -213,7 +241,7 @@ public class HashMap<K,V> {
     private void putForCreate(K key, V value) {
         int hash = (key==null) ? 0 : hash(key);
         int i = indexFor(hash,table.length);
-        for(Entry<K,V> e = table[i];e!=null;e = e.next){
+        for(HashMapEntry<K,V> e = table[i];e!=null;e = e.next){
             // 若该HashMap表中存在“键值等于key”的元素，则替换该元素的value值
             if(e.hash == hash && ( e.key== key || (key!=null && key.equals(e.key)))){
                 e.value = value;
@@ -238,7 +266,7 @@ public class HashMap<K,V> {
      * @param newCapacity
      */
     void resize(int newCapacity){
-        Entry<K,V>[] oldTable = table;
+        HashMapEntry<K,V>[] oldTable = table;
         int oldCapacity = oldTable.length;
         if (oldCapacity == MAXIMUM_CAPACITY) {  //如果原来的容量已经是最大容量，直接阈值设置为最大值
             threshold = Integer.MAX_VALUE;
@@ -247,7 +275,7 @@ public class HashMap<K,V> {
 
         // 新建一个HashMap，将“旧HashMap”的全部元素添加到“新HashMap”中，
         // 然后，将“新HashMap”赋值给“旧HashMap”。
-        Entry<K,V>[] newTable = new Entry[newCapacity];
+        HashMapEntry<K,V>[] newTable = new HashMapEntry[newCapacity];
         transfer(newTable);
         table = newTable;
         threshold = (int)(newCapacity*loadFactor);
@@ -257,10 +285,10 @@ public class HashMap<K,V> {
      * 将HashMap中原来的全部元素都添加到newTable中
      * @param newTable
      */
-    void transfer(Entry[] newTable) {
-        for(Entry<K,V> e : table){
+    void transfer(HashMapEntry[] newTable) {
+        for(HashMapEntry<K,V> e : table){
             while (e != null){
-                Entry<K,V> next = e.next;
+                HashMapEntry<K,V> next = e.next;
                 int i = indexFor(e.hash,newTable.length);   //返回元素在新数组的下标
                 e.next = newTable[i];
                 newTable[i] = e;
@@ -302,9 +330,9 @@ public class HashMap<K,V> {
      * @param bucketIndex
      */
     void createEntry(int hash, K key, V value, int bucketIndex) {
-        Entry<K,V> e = table[bucketIndex];  // 保存“bucketIndex”位置的值到“e”中
+        HashMapEntry<K,V> e = table[bucketIndex];  // 保存“bucketIndex”位置的值到“e”中
         //设置“bucketIndex”位置的元素为“新Entry”，设置“e”为“新Entry的下一个节点”,总是让新的entry指向旧的entry
-        table[bucketIndex] = new Entry<K,V>(hash,key,value,e);
+        table[bucketIndex] = new HashMapEntry<K,V>(hash,key,value,e);
         size++;
     }
 
@@ -323,6 +351,11 @@ public class HashMap<K,V> {
      * @return
      */
     public V put(K key,V value){
+        if (table == EMPTY_TABLE) {
+            inflateTable(threshold);
+        }
+
+        //首先确认这个key是不是null的
         if(key == null){
             return putForNullKey(value);
         }
@@ -330,7 +363,7 @@ public class HashMap<K,V> {
         int hash = hash(key);
         int i = indexFor(hash,table.length);
         //先判断在table[i]的链表上有没有Key是key的节点，有的话就替换
-        for(Entry<K,V> e = table[i];e!=null;e=e.next){
+        for(HashMapEntry<K,V> e = table[i];e!=null;e=e.next){
             if(hash==e.hash && (key==e.key || key.equals(e.key))){
                 V oldValue = e.value;
                 e.value = value;
@@ -350,7 +383,7 @@ public class HashMap<K,V> {
      */
     private V putForNullKey(V value) {
         //这个0表示是key为null的时候，根据hash值0计算出来的在数组中的下标的位置0
-        for(Entry<K,V> e = table[0];e!=null;e = e.next){
+        for(HashMapEntry<K,V> e = table[0];e!=null;e = e.next){
             if(e.key == null){
                 V oldValue = e.value;
                 e.value = value;
@@ -371,6 +404,9 @@ public class HashMap<K,V> {
         int numKeysToBeAdded = m.size();    //要添加的key的数量
         if(numKeysToBeAdded == 0){
             return;
+        }
+        if (table == EMPTY_TABLE) {
+            inflateTable((int) Math.max(numKeysToBeAdded * loadFactor, threshold));
         }
         /**
          * 如果要添加的集合数量大于或等于阈值，请展开映射。这是保守的；显而易见的条件是( m . size ( ) + size ) > =threshold，
@@ -399,7 +435,7 @@ public class HashMap<K,V> {
      * @return
      */
     public V remove(Object key){
-        Entry<K,V> e = removeEntryForKey(key);
+        HashMapEntry<K,V> e = removeEntryForKey(key);
         return (e==null) ? null : e.value;
     }
 
@@ -408,16 +444,16 @@ public class HashMap<K,V> {
      * @param key
      * @return
      */
-    private Entry<K,V> removeEntryForKey(Object key) {
+    private HashMapEntry<K,V> removeEntryForKey(Object key) {
         //计算这个key的hash值
         int hash = (key==null) ? 0 : hash(key);
         int i = indexFor(hash,table.length);
-        Entry<K,V> prev = table[i]; //得到单链表的头节点
-        Entry<K,V> e = prev;        //从头结点开始遍历
+        HashMapEntry<K,V> prev = table[i]; //得到单链表的头节点
+        HashMapEntry<K,V> e = prev;        //从头结点开始遍历
 
         //删除单链表中的节点
         while (e != null){
-            Entry<K,V> next = e.next;
+            HashMapEntry<K,V> next = e.next;
             if(hash==e.hash && (key==e.key || key.equals(e.key))){
                 size--;
                 if(prev == e){  //要删除的结点为头节点，将数组指向额链表的头结点设置为当前节点的下一个节点
@@ -438,7 +474,7 @@ public class HashMap<K,V> {
      * 清空HashMap        蛮力法清空
      */
     public void clear(){
-        Entry[] tab = table;
+        HashMapEntry[] tab = table;
         for(int i=0;i<tab.length;i++){
             tab[i] = null;
         }
@@ -454,7 +490,7 @@ public class HashMap<K,V> {
         if(key == null){
             return getForNullKey(key);
         }
-        Entry<K,V> e = getEntry(key);
+        HashMapEntry<K,V> e = getEntry(key);
         return (e==null) ? null : e.value;
     }
 
@@ -465,7 +501,7 @@ public class HashMap<K,V> {
      */
     private V getForNullKey(Object key) {
         //从头遍历
-        for(Entry<K,V> e=table[0]; e != null;e = e.next){
+        for(HashMapEntry<K,V> e=table[0]; e != null;e = e.next){
             if(e.key == null){
                 return e.value;
             }
@@ -478,10 +514,10 @@ public class HashMap<K,V> {
      * @param key
      * @return
      */
-    final Entry<K,V> getEntry(Object key){
+    final HashMapEntry<K,V> getEntry(Object key){
         int hash = (key == null) ? 0 : hash(key);
         int i = indexFor(hash,table.length);
-        for(Entry<K,V> e = table[i];e != null; e = e.next){
+        for(HashMapEntry<K,V> e = table[i];e != null; e = e.next){
             if(hash==e.hash && (key==e.key || key.equals(e.key))){
                 return e;
             }
@@ -507,9 +543,9 @@ public class HashMap<K,V> {
         if (value == null)
             return containsNullValue();
 
-        Entry[] tab = table;
+        HashMapEntry[] tab = table;
         for (int i = 0; i < tab.length ; i++)
-            for (Entry e = tab[i] ; e != null ; e = e.next)
+            for (HashMapEntry e = tab[i] ; e != null ; e = e.next)
                 if (value.equals(e.value))
                     return true;
         return false;
@@ -520,9 +556,9 @@ public class HashMap<K,V> {
      * @return
      */
     private boolean containsNullValue() {
-        Entry[] tab = table;
+        HashMapEntry[] tab = table;
         for (int i = 0; i < tab.length ; i++)
-            for (Entry e = tab[i] ; e != null ; e = e.next)
+            for (HashMapEntry e = tab[i] ; e != null ; e = e.next)
                 if (e.value == null)
                     return true;
         return false;
