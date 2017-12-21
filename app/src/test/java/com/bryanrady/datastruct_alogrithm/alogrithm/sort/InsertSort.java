@@ -13,7 +13,7 @@ public class InsertSort {
      *              希尔排序的前身
      */
 
-    /**
+    /**0
      * 插入排序
      * @param array
      */

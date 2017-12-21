@@ -38,7 +38,7 @@ public class LinkedList<E> {
         Node<E> prev;
         Node<E> next;
 
-        public Node(Node<E> prev,E element,Node next){
+        Node(Node<E> prev,E element,Node next){
             this.prev = prev;
             this.element = element;
             this.next = next;
@@ -146,7 +146,7 @@ public class LinkedList<E> {
      * @param e
      */
     public void addFirst(E e){
-        linkLast(e);
+        linkFirst(e);
     }
 
     /**

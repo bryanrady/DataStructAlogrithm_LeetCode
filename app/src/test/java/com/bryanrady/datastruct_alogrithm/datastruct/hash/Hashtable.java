@@ -313,9 +313,10 @@ public class Hashtable<K,V>{
      *          7、内部实现使用的数组初始化和扩容方式不同
      *                   HashTable在不指定容量的情况下的默认容量为11，而HashMap为16，SDK上是4。
      *                   Hashtable不要求底层数组的容量一定要为2的整数次幂，而HashMap则要求一定为2的整数次幂。
+     *                   扩容方法在 putAll（）方法里面
      *
      *                  Hashtable扩容时，将容量变为原来的2倍加1，而HashMap扩容时，将容量变为原来的2倍
-     *
+     *                  扩容方法在 rehash（）方法里面
      *
      */
 }
