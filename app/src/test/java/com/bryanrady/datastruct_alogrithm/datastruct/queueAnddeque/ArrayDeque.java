@@ -1,4 +1,4 @@
-package com.bryanrady.datastruct_alogrithm.datastruct.deque;
+package com.bryanrady.datastruct_alogrithm.datastruct.queueAnddeque;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
