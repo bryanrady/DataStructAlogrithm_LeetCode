@@ -1,5 +1,6 @@
 package com.bryanrady.datastruct_alogrithm.leetcode.graph;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,7 +40,29 @@ public class Lc690_EmployeeImportance {
         public List<Integer> subordinates;
     }
 
-    public int getImportance(List<Employee> employees, int id) {
-        return 0;
+    public int getImportance(List<Employee> employees, int id)
+    {
+        HashMap<Integer, Employee> map = new HashMap<>();
+
+        for(Employee e: employees)
+            map.put(e.id, e);
+
+        return dfs(id, map);
+    }
+
+    private int dfs(int id, HashMap<Integer, Employee> map)
+    {
+        Employee e = map.get(id);
+
+        if(e.subordinates.size() == 0)
+            return e.importance;
+
+        int imp = e.importance;
+
+        for(int sub: e.subordinates)
+            imp += dfs(sub, map);
+
+
+        return imp;
     }
 }
