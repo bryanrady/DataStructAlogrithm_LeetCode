@@ -32,9 +32,7 @@ public class Lc39_CombinationsSum {
             System.arraycopy(list, 0, temp, 0, len);
             result.add(Arrays.asList(temp));
         }
-
         if (remain <= 0) return;
-
         for (int i = start; i >= 0; i--) {
             list[len] = candidates[i];
             backtrack(result, list, candidates, i, len + 1, remain - candidates[i]);

@@ -27,15 +27,18 @@ public class Lc257_BinaryTreePaths {
      */
 
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> res = new ArrayList<>();
-        if(root==null) return res;
-        dfs(root,res,"");
-        return res;
-
+        List<String> list = new ArrayList<>();
+        if(root==null){
+            return list;
+        }
+        dfs(root,list,"");
+        return list;
     }
-    public void dfs(TreeNode root, List<String> res, String path){
-        if(root==null) return;
 
+    private void dfs(TreeNode root, List<String> res, String path){
+        if(root==null){
+            return;
+        }
         if(root.left==null && root.right==null){
             res.add(path+root.val+"");
         }

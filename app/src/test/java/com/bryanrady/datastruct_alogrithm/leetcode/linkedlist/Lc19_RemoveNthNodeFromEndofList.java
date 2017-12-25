@@ -25,20 +25,22 @@ public class Lc19_RemoveNthNodeFromEndofList {
      */
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        if(head == null) return null;
+        if(head == null){
+            return null;
+        }
         ListNode dummy = new ListNode(0);
         dummy.next = head;
-        ListNode cur = dummy;
-        while(cur.next != null && n > 0) {
-            cur = cur.next;
+        ListNode curr = dummy;
+        while(curr.next != null && n > 0) {
+            curr = curr.next;
             n--;
         }
-        ListNode tmp = dummy;
-        while(cur.next != null) {
-            tmp = tmp.next;
-            cur = cur.next;
+        ListNode temp = dummy;
+        while(curr.next != null) {
+            temp = temp.next;
+            curr = curr.next;
         }
-        tmp.next = tmp.next.next;
+        temp.next = temp.next.next;
         return dummy.next;
     }
 }

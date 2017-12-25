@@ -20,8 +20,6 @@ public class Lc279_PerfectSquares {
         int[] nums = new int[n + 1];
         nums[0] = 0;
         for (int i = 1; i <= n; i++) {
-            // Use local variable.
-            // Don't use nums[i]. It will cause cache miss and reduce the performance.
             int min = Integer.MAX_VALUE;
             for (int j = 1; j * j <= i; j++) {
                 min = Math.min(min, 1 + nums[i - j * j]);

@@ -25,19 +25,20 @@ public class Lc102_BinaryTreeLevelOrderTraversal {
      */
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> res = new ArrayList<>();
-        levelTraverse(root, 0, res);
-        return res;
+        List<List<Integer>> listlist = new ArrayList<>();
+        levelTraverse(root, 0, listlist);
+        return listlist;
     }
-    private void levelTraverse(TreeNode root, int depth, List<List<Integer>> res) {
+
+    private void levelTraverse(TreeNode root, int depth, List<List<Integer>> listlist) {
         if (root == null) {
             return;
         }
-        if (res.size() == depth) {
-            res.add(new ArrayList<Integer>());
+        if (listlist.size() == depth) {
+            listlist.add(new ArrayList<Integer>());
         }
-        res.get(depth).add(root.val);
-        levelTraverse(root.left, depth+1, res);
-        levelTraverse(root.right, depth+1, res);
+        listlist.get(depth).add(root.val);
+        levelTraverse(root.left, depth+1, listlist);
+        levelTraverse(root.right, depth+1, listlist);
     }
 }

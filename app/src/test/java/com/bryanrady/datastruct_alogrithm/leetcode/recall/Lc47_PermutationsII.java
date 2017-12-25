@@ -23,17 +23,18 @@ public class Lc47_PermutationsII {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if (nums.length == 0)
+        if (nums.length == 0){
             return null;
+        }
         Arrays.sort(nums);
         getResult(result,nums,new ArrayList<Integer>(),0,new int[nums.length]);
         return result;
     }
 
-    public static void getResult(List<List<Integer>> result,int[] nums,List<Integer> ans,int num,int[] pos){
+    private void getResult(List<List<Integer>> result,int[] nums,List<Integer> ans,int num,int[] pos){
         if( num == nums.length){
             result.add(new ArrayList<Integer>(ans));
-            return ;
+            return;
         }
         for( int i = 0 ; i<nums.length;i++){
             if( pos[i] == 0 ){

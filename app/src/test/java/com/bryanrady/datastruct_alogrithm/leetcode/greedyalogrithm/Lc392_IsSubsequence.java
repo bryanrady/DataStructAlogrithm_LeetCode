@@ -20,7 +20,7 @@ public class Lc392_IsSubsequence {
 
      */
 
-    public boolean isSubsequence(final String s, final String t) {
+    public boolean isSubsequence(String s,String t) {
         int start = 0;
         for(char c : s.toCharArray()) {
             start = t.indexOf(c, start) + 1;

@@ -40,29 +40,23 @@ public class Lc690_EmployeeImportance {
         public List<Integer> subordinates;
     }
 
-    public int getImportance(List<Employee> employees, int id)
-    {
+    public int getImportance(List<Employee> employees, int id) {
         HashMap<Integer, Employee> map = new HashMap<>();
-
-        for(Employee e: employees)
+        for(Employee e: employees){
             map.put(e.id, e);
-
+        }
         return dfs(id, map);
     }
 
-    private int dfs(int id, HashMap<Integer, Employee> map)
-    {
+    private int dfs(int id, HashMap<Integer, Employee> map) {
         Employee e = map.get(id);
-
-        if(e.subordinates.size() == 0)
+        if(e.subordinates.size() == 0){
             return e.importance;
-
+        }
         int imp = e.importance;
-
-        for(int sub: e.subordinates)
+        for(int sub: e.subordinates){
             imp += dfs(sub, map);
-
-
+        }
         return imp;
     }
 }

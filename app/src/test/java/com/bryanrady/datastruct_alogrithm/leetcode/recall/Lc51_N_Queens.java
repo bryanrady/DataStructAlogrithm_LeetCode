@@ -1,7 +1,6 @@
 package com.bryanrady.datastruct_alogrithm.leetcode.recall;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,52 +31,56 @@ public class Lc51_N_Queens {
      ]
      */
 
+
     public List<List<String>> solveNQueens(int n) {
-        boolean[]
-                //ocp0 = new boolean[n],
-                ocp90 = new boolean[n],
-                // 总共 2n - 1 种可能性，(0,0) 的 index 是 n - 1
-                ocp45 = new boolean[2 * n - 1],
-                ocp135 = new boolean[2 * n - 1];
-        List<List<String>> ans = new ArrayList<List<String>>();
+        List<List<String>> list = new ArrayList<>();
+        //先在二维数组中填'.'
         char[][] map = new char[n][n];
-        for (char[] tmp : map) Arrays.fill(tmp, '.'); //init
-
-        solve(0, n, map, ans, ocp45, ocp90, ocp135);
-        return ans;
-    }
-
-    private void solve(int depth, int n, char[][] map, List<List<String>> ans,
-                       boolean[] ocp45, boolean[] ocp90, boolean[] ocp135) {
-        if (depth == n) {
-            addSolution(ans, map);
-            return;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                map[i][j] = '.';
+            }
         }
 
-        for (int j = 0; j < n; j++)
-            // 每次都进行新的一行，所以行不用检查
-            // 90度代表棋盘的列
-            // 45度对角线（从左上到右下）同一条线上 row + col 是相等的，因此可用作 index
-            // 135度对角线（从左下到右上）可从 (0,0) 即 index (n - 1) 为起点
-            // 因为同一条对角线 row - col 值恒定，可用作 offset 表示对角线的 index.
-            if (!ocp90[j] && !ocp45[depth + j] && !ocp135[j - depth + n - 1]) {
-                ocp90[j] = true;
-                ocp45[depth + j] = true;
-                ocp135[j - depth + n - 1] = true;
-                map[depth][j] = 'Q';
+        eightQueen(list, map, 0);
+        return list;
+    }
 
-                solve(depth + 1, n, map, ans, ocp45, ocp90, ocp135);
-
-                ocp90[j] = false;
-                ocp45[depth + j] = false;
-                ocp135[j - depth + n - 1] = false;
-                map[depth][j] = '.';
+    private void eightQueen(List<List<String>> list, char[][] map, int row) {
+        if (row == map.length) {   //退出递归的条件
+            list.add(construct(map));
+            return;
+        }
+        for (int i = 0; i < map.length; i++) {
+            if (judge(map, row, i)) {
+                continue;
             }
+            map[row][i] = 'Q';
+            eightQueen(list, map, row + 1);
+            map[row][i] = '.';
+        }
     }
 
-    private void addSolution(List<List<String>> ans, char[][] map) {
-        List<String> cur = new ArrayList<>();
-        for (char[] i : map) cur.add(String.valueOf(i));
-        ans.add(cur);
+    private boolean judge(char[][] map, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            int j = 0;
+            while (j < map.length && map[i][j] != 'Q') {
+                j++;
+            }
+            if (j == col || Math.abs(col - j) == Math.abs(row - i)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    private List<String> construct(char[][] map) {
+        List<String> list = new ArrayList<>();
+        for(char[] c : map){
+            String s = new String(c);
+            list.add(s);
+        }
+        return list;
+    }
+
 }

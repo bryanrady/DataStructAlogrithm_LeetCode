@@ -29,15 +29,14 @@ public class Lc226_InvertBinaryTree {
      */
 
     public TreeNode invertTree(TreeNode root) {
-        if(root!=null)
-        {
-            TreeNode temNode=root.left;
-            root.left=root.right;
-            root.right=temNode;
+        if(root != null) {
+            TreeNode temNode = root.left;
+            root.left = root.right;
+            root.right = temNode;
+
             invertTree(root.left);
             invertTree(root.right);
         }
-
         return root;
     }
 }

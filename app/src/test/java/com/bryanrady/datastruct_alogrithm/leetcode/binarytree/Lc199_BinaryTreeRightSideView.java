@@ -1,9 +1,7 @@
 package com.bryanrady.datastruct_alogrithm.leetcode.binarytree;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Created by wqb on 2017/12/23.
@@ -26,29 +24,19 @@ public class Lc199_BinaryTreeRightSideView {
      */
 
     public List<Integer> rightSideView(TreeNode root) {
-        Queue<TreeNode> q = new LinkedList<>();
-        List<Integer> res = new ArrayList<>();
+        List<Integer> result = new ArrayList<Integer>();
+        findRightView(root,result,0);
+        return result;
+    }
+
+    private void findRightView(TreeNode root,List<Integer> result,int depth){
         if(root==null){
-            return res;
+            return;
         }
-        q.offer(root);
-        int counter = 1;
-        while(!q.isEmpty()){
-            int localCounter = 0;
-            for(int i=0;i<counter;i++){
-                TreeNode temp = q.poll();
-                if(temp.left!=null){
-                    q.offer(temp.left);
-                    localCounter++;
-                }
-                if(temp.right!=null){
-                    q.offer(temp.right);
-                    localCounter++;
-                }
-                if(i==counter-1) res.add(temp.val);
-            }
-            counter=localCounter;
+        if(depth==result.size()){
+            result.add(root.val);
         }
-        return res;
+        findRightView(root.right,result,depth+1);
+        findRightView(root.left,result,depth+1);
     }
 }

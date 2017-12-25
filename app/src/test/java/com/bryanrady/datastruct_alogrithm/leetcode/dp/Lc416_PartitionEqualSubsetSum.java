@@ -45,6 +45,7 @@ public class Lc416_PartitionEqualSubsetSum {
         }
         return false;
     }
+
     public void reverse(int[] nums) {
         for (int i = 0; i < nums.length; i++){
             nums[i] *= -1;

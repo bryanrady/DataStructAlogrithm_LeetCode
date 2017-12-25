@@ -18,11 +18,14 @@ public class Lc455_AssignCookies {
      */
 
     public int findContentChildren(int[] g, int[] s) {
-        int result = 0;
         Arrays.sort(g);
         Arrays.sort(s);
-        for(int i=0; result<g.length && i<s.length; i++){
+
+        int result = 0;
+        int i = 0;
+        while (result< g.length && i<s.length){
             if(g[result]<=s[i]) result++;
+            i++;
         }
         return result;
     }

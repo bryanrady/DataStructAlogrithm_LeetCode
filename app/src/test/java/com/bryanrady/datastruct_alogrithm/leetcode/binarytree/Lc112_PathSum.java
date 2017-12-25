@@ -26,13 +26,12 @@ public class Lc112_PathSum {
      */
 
     public static boolean hasPathSum(TreeNode root, int sum) {
-        if(root==null)//递归结束条件
+        if(root==null){
             return false;
-        if(root.left==null&&root.right==null&&sum==root.val)//递归结束条件
-            return true;
-        else {
-            return hasPathSum(root.left, sum-root.val)||hasPathSum(root.right, sum-root.val);//递归调用
         }
-
+        if(root.left==null&&root.right==null&&sum==root.val){
+            return true;
+        }
+        return hasPathSum(root.left, sum-root.val)||hasPathSum(root.right, sum-root.val);//递归调用
     }
 }

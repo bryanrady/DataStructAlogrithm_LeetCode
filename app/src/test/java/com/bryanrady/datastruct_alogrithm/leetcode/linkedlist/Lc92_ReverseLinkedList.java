@@ -24,6 +24,7 @@ public class Lc92_ReverseLinkedList {
         if(head==null || head.next==null){
             return head;
         }
+        //定义一个辅助头结点（不存在的头结点）
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         ListNode prev = dummy;

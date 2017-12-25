@@ -15,25 +15,18 @@ public class Lc108_ConvertSortedArrayToBinarySearchTree {
         if (nums == null || nums.length == 0) {
             return null;
         }
-
-        return helper(0, nums.length - 1, nums);
+        return sort(0, nums.length - 1, nums);
     }
 
-    private TreeNode helper (int start, int end, int[] nums) {
-
+    private TreeNode sort (int start, int end, int[] nums) {
         if (start > end) {
             return null;
         }
-
-
         int mid= start + (end - start) / 2;
         TreeNode root = new TreeNode(nums[mid]);
 
-        //D&C
-        root.left = helper(start, mid - 1, nums);
-        //System.out.println(leftSub.val);
-        root.right = helper(mid + 1, end , nums);
-        //System.out.println(rightSub.val);
+        root.left = sort(start, mid - 1, nums);
+        root.right = sort(mid + 1, end , nums);
         return root;
     }
 

@@ -28,12 +28,37 @@ public class Lc437_PathSumIII {
     }
 
     public static int dfs(TreeNode root, int sum, int target, Map<Integer, Integer> map){
-        if(root==null)return 0;
-        sum+=root.val;
-        int res = map.getOrDefault(sum-target,0);
+        if(root==null){
+            return 0;
+        }
+        sum += root.val;
+        int res = map.getOrDefault(sum - target, 0);
         map.put(sum, map.getOrDefault(sum, 0)+1);
         res += dfs(root.left, sum, target, map )+dfs(root.right, sum, target, map );
         map.put(sum, map.getOrDefault(sum, 0)-1);
         return res;
+    }
+
+
+
+    public int pathSum1(TreeNode root, int sum) {
+        if (root == null)
+            return 0;
+        else {
+            int count = helper(root, sum, 0);
+            return count + pathSum1(root.left, sum) + pathSum1(root.right, sum);
+        }
+    }
+
+    private int helper(TreeNode root, int sum, int total) {
+        if (root == null)
+            return 0;
+        else {
+            total += root.val;
+            int count = sum == total ? 1 : 0;
+            count += helper(root.left, sum, total);
+            count += helper(root.right, sum, total);
+            return count;
+        }
     }
 }

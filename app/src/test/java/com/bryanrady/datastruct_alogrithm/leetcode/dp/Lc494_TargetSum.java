@@ -25,17 +25,39 @@ public class Lc494_TargetSum {
 
     public int findTargetSumWays(int[] nums, int s) {
         int sum = 0;
-        for (int n : nums)
+        for (int n : nums){
             sum += n;
+        }
         return sum < s || (s + sum) % 2 > 0 ? 0 : subsetSum(nums, (s + sum) >>> 1);
     }
 
     public int subsetSum(int[] nums, int s) {
         int[] dp = new int[s + 1];
         dp[0] = 1;
-        for (int n : nums)
-            for (int i = s; i >= n; i--)
+        for (int n : nums){
+            for (int i = s; i >= n; i--){
                 dp[i] += dp[i - n];
+            }
+        }
+        return dp[s];
+    }
+
+    public int findTargetSumWays1(int[] nums, int s) {
+        int sum = 0;
+        for (int n : nums)
+            sum += n;
+        if(sum < s || (sum + s) % 2 == 1) return 0;
+        return dpHelper(nums, (sum + s) / 2);
+    }
+
+    public int dpHelper(int[] nums, int s) {
+        int[] dp = new int[s + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= nums.length; i++) {
+            for (int j = s; j - nums[i - 1] >= 0; j--) {
+                dp[j] = dp[j] + dp[j - nums[i - 1]];
+            }
+        }
         return dp[s];
     }
 }

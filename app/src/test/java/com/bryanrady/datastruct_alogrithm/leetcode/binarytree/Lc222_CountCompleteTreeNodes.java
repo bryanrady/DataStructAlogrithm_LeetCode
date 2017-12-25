@@ -18,13 +18,13 @@ public class Lc222_CountCompleteTreeNodes {
      */
 
     public int countNodes(TreeNode root){
-        // if(root == null) return 0;
+        if(root == null) return 0;
         int height = height(root);
         TreeNode node = root;
         int sum =  0;
         while( node != null ){
             int rh = height(node.right);
-            if(rh == height -1){//left subtree fully complete
+            if(rh == height -1){
                 sum += 1 << rh;
                 node = node.right;
             }else{
@@ -36,6 +36,11 @@ public class Lc222_CountCompleteTreeNodes {
         return sum;
     }
 
+    /**
+     * 完全二叉树中 计算节点的高度就是节点有多少层造孩子
+     * @param node
+     * @return
+     */
     public int height(TreeNode node){
         TreeNode n = node;
         int h = 0;

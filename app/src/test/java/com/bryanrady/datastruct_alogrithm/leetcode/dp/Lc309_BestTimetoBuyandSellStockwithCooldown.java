@@ -17,7 +17,10 @@ public class Lc309_BestTimetoBuyandSellStockwithCooldown {
      */
 
     public int maxProfit(int[] prices) {
-        int sell = 0, prev_sell = 0, buy = Integer.MIN_VALUE, prev_buy;
+        int sell = 0;
+        int prev_sell = 0;
+        int buy = Integer.MIN_VALUE;
+        int prev_buy = 0;
         for (int price : prices) {
             prev_buy = buy;
             buy = Math.max(prev_sell - price, prev_buy);

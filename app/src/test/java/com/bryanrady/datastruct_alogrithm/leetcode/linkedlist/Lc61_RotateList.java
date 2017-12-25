@@ -23,14 +23,19 @@ public class Lc61_RotateList {
         dummy.next=head;
         ListNode fast=dummy,slow=dummy;
 
+        //这里是为了获取链表的长度
         int i;
-        for (i=0;fast.next!=null;i++)//Get the total length
+        for (i=0;fast.next!=null;i++){
             fast=fast.next;
+        }
 
-        for (int j=i-k%i;j>0;j--) //Get the i-n%i th node
+        //获取准备要旋转的下一个节点slow
+        for (int j=i-k%i;j>0;j--){
             slow=slow.next;
+        }
 
-        fast.next=dummy.next; //Do the rotation
+        //开始旋转
+        fast.next=dummy.next;
         dummy.next=slow.next;
         slow.next=null;
 

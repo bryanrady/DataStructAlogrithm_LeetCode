@@ -18,12 +18,13 @@ public class Lc198_HouseRobber {
      */
 
     public int rob(int[] nums) {
-        int rob = 0, not_rob = 0;
+        int rob = 0;
+        int not_rob = 0;
         for(int i=0;i<nums.length;i++){
             int temp = rob;
             rob = not_rob + nums[i];
-            not_rob = Math.max(temp,not_rob);
+            not_rob = Math.max(temp, not_rob);
         }
-        return Math.max(rob,not_rob);
+        return Math.max(rob, not_rob);
     }
 }

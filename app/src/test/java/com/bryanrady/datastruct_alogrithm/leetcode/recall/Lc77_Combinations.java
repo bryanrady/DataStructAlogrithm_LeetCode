@@ -28,22 +28,24 @@ public class Lc77_Combinations {
      提示：采用“剪枝”思想尝试进行优化。
      */
 
-    private void solve(List<List<Integer>> res,List<Integer> tmpList,int n,int k,int index){
-        if(tmpList.size()==k){
-            res.add(new LinkedList<>(tmpList));
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> list = new LinkedList<>();
+        List<Integer> tempList = new LinkedList<>();
+        solve(list,tempList,n,k,1);
+        return list;
+    }
+
+    private void solve(List<List<Integer>> list,List<Integer> tempList,int n,int k,int index){
+        if(tempList.size() == k){
+            list.add(new LinkedList<>(tempList));
             return;
         }
-        int size = tmpList.size();
+        int size = tempList.size();
         for(int i = index;i<=n-k+size+1;i++){
-            tmpList.add(i);
-            solve(res,tmpList,n,k,i+1);
-            tmpList.remove(size);
+            tempList.add(i);
+            solve(list,tempList,n,k,i+1);
+            tempList.remove(size);
         }
     }
-    public List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> res = new LinkedList<>();
-        List<Integer> tmpList = new LinkedList<>();
-        solve(res,tmpList,n,k,1);
-        return res;
-    }
+
 }
