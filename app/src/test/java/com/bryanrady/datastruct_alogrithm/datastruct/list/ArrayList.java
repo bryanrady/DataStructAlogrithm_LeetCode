@@ -36,7 +36,11 @@ public class ArrayList<E>{
     public ArrayList(Collection<? extends E> c){
         elementData = c.toArray();
         size = elementData.length;
+//        c.toArray might (incorrectly) not return Object[] (see 6260652)。就是c.toArray()可能不是返回的Object[]类型，所以需要判断转换
+//        https://blog.csdn.net/aitangyong/article/details/30274749
+//        为了考虑这种情况，所以源码中进行了if判断，来防止错误的数组对象导致异常。Arrays.copyOf(elementData, size, Object[].class);
         if(elementData.getClass() != Object[].class){
+            //这个方法就是用来创建1个Object[]数组，这样数组中就可以存放任意对象了。
             elementData = Arrays.copyOf(elementData,size,Object[].class);
         }
     }
@@ -314,6 +318,7 @@ public class ArrayList<E>{
         if(newCapacity < minCapacity){     //如果还不够，直接将当前容量设置为新的容量
             newCapacity = minCapacity;
         }
+        //Integer.MAX_VALUE - 8 数组最大容量
         if(newCapacity > Integer.MAX_VALUE - 8){
             hugeCapacity(minCapacity);
         }
