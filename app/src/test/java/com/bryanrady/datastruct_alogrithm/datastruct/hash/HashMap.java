@@ -459,7 +459,7 @@ public class HashMap<K,V> {
                 if(prev == e){  //要删除的结点为头节点，将数组指向额链表的头结点设置为当前节点的下一个节点
                     table[i] = next;
                 }else{
-                    e.next = next;
+                    prev.next = next;
                 }
                 e.recordRemoval(this);  //从数组中删除元素时调用
                 return e;
