@@ -83,8 +83,9 @@ public class LinkedList<E> {
         if(numNew==0){
             return false;
         }
-        Node<E> pred,succ;  //设置当前要插入节点的前后节点
-        if(index==size){
+        //设置当前要插入节点的前后节点
+        Node<E> pred,succ;
+        if(index==size){    //如果是尾部插入
             succ = null;
             pred = last;
         }else{
@@ -96,7 +97,7 @@ public class LinkedList<E> {
         for(Object o : a){
             E e = (E)o;
             Node<E> newNode = new Node<>(pred,e,null);
-            if(pred==null){
+            if(pred==null){     //说明链表中没有数据，那么刚插入的节点就是头结点
                 first = newNode;
             }else{
                 pred.next = newNode;
